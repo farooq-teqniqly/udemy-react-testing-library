@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 function SummaryForm() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  const termsAndConditionsLabel = (
+  const overlay = <Tooltip>No ice cream will actually be delivered.</Tooltip>;
+
+  const termsAndConditions = (
     <span>
-      I agree to the <a href="/">Terms and Conditions</a>
+      I agree to the
+      <OverlayTrigger placement="bottom" overlay={overlay}>
+        <span style={{ color: "blue" }}>Terms and Conditions.</span>
+      </OverlayTrigger>
     </span>
   );
   return (
@@ -17,8 +24,8 @@ function SummaryForm() {
           <Form.Check
             type="checkbox"
             onClick={() => setButtonDisabled((s) => !s)}
-            label={termsAndConditionsLabel}
           ></Form.Check>
+          <Form.Text>{termsAndConditions}</Form.Text>
         </Form.Group>
         <Button variant="primary" type="submit" disabled={buttonDisabled}>
           Confirm Order

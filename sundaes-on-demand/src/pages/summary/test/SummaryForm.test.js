@@ -10,6 +10,10 @@ const setup = (jsx) => {
   };
 };
 
+const getPopover = () => {
+  return screen.queryByText(/no ice cream will actually be delivered/i);
+};
+
 describe("SummaryForm", () => {
   let testSetup = {};
 
@@ -27,6 +31,10 @@ describe("SummaryForm", () => {
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
     });
+
+    test("And the popover is hidden", () => {
+      expect(getPopover()).not.toBeInTheDocument();
+    });
   });
 
   describe("When the Terms and Conditions checkbox is checked", () => {
@@ -43,6 +51,21 @@ describe("SummaryForm", () => {
       await testSetup.user.click(cb);
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
+    });
+  });
+
+  describe("When the user hovers over the terms and conditions text", () => {
+    test("Then the popover appears", async () => {
+      const termsAndConditions = screen.getByText(/terms and conditions/i);
+      await testSetup.user.hover(termsAndConditions);
+      expect(getPopover()).toBeInTheDocument();
+    });
+
+    test("And unhovering removes the popover", async () => {
+      const termsAndConditions = screen.getByText(/terms and conditions/i);
+      await testSetup.user.hover(termsAndConditions);
+      await testSetup.user.unhover(termsAndConditions);
+      expect(getPopover()).not.toBeInTheDocument();
     });
   });
 });
